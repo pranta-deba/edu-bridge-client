@@ -1,12 +1,13 @@
 
-const Home = () => {
+const Admission = () => {
     return (
         <div className="w-full">
             <div className="container">
 
             </div>
+            admissions
         </div>
     );
 };
 
-export default Home;
+export default Admission;

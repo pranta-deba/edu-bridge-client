@@ -1,155 +1,98 @@
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { FaUserCircle, FaBars, FaTimes } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { NavLink, Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-    setDropdownOpen(false); // Close dropdown if the menu is toggled
-  };
+  const [show, setShow] = useState(false);
 
   return (
-    <div className="">
-      <div className="bg-white rounded shadow-lg py-3 px-5">
-        <nav className="2xl:container 2xl:mx-auto flex justify-between items-center">
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <img src="/logo.png" alt="EduBridge Logo" className="w-12" />
-            <h2 className="font-normal text-2xl leading-6 text-gray-800">
-              <span className="font-extrabold text-primary">Edu</span>Bridge
-            </h2>
-          </div>
-          
-          {/* Desktop Menu Items */}
-          <ul className="hidden md:flex flex-auto justify-center space-x-5">
-            {[
-              { title: 'Home', path: '/' },
-              { title: 'About', path: '/about' },
-              { title: 'Contact', path: '/contact' },
-              { title: 'Results', path: '/results' },
-              { title: 'Admission Info', path: '/admission-info' },
-            ].map((item, index) => (
-              <li key={index}>
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `px-4 py-2 font-medium ${
-                      isActive ? 'text-[#CB152E]' : 'text-black'
-                    }`
-                  }
-                >
-                  {item.title}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-
-          {/* Buttons and Profile Dropdown for Desktop */}
-          <div className="hidden md:flex items-center space-x-3">
-            <button className="px-4 py-2 bg-[#CB152E] text-white rounded hover:bg-red-700">
-              Student Login
+    <nav className="w-full">
+      <div className="container mx-auto px-6 flex items-center justify-between py-3 md:py-0">
+        <div className="flex items-center" aria-label="Home" role="img">
+          <img className="cursor-pointer w-10" src="logo.png" alt="logo" />
+          <Link to="/" className="ml-2 text-base lg:text-2xl font-bold text-gray-800">Edu<span className="text-primary">Bridge</span></Link>
+        </div>
+        <div>
+          <button onClick={() => setShow(!show)} className="sm:block md:hidden lg:hidden text-gray-500 hover:text-gray-700 focus:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            <img className="h-8 w-8" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/center_aligned_with_image-svg4.svg" alt="show" />
+          </button>
+          <div id="menu" className={`md:block lg:block ${show ? '' : 'hidden'}`}>
+            <button onClick={() => setShow(!show)} className="block md:hidden lg:hidden text-gray-500 hover:text-gray-700 focus:text-gray-700 fixed focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white md:bg-transparent z-30 top-0 mt-3">
+              <img className="h-8 w-8" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/center_aligned_with_image-svg5.svg" alt="hide" />
             </button>
-            <button className="px-4 py-2 bg-[#CB152E] text-white rounded hover:bg-red-700">
-              Teacher Login
-            </button>
-            <div className="relative">
-              <FaUserCircle
-                size={24}
-                className="text-black cursor-pointer"
-                onClick={toggleDropdown}
-              />
-              {dropdownOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-md"
-                >
-                  <ul>
-                    <li>
-                      <button className="w-full px-4 py-2 text-left text-black hover:bg-gray-100">
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </motion.div>
-              )}
-            </div>
+            <ul className="flex text-3xl md:text-base items-center py-4 md:flex flex-col md:flex-row justify-center fixed md:relative top-0 bottom-0 left-0 right-0 bg-white md:bg-transparent  z-20">
+              {links}
+            </ul>
           </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-3">
-            <button
-              onClick={toggleMenu}
-              className="text-[#CB152E] focus:outline-none"
-            >
-              {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
-          </div>
-        </nav>
-
-        {/* Mobile Sidebar Menu */}
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            className="fixed top-0 left-0 h-full w-3/4 bg-white shadow-lg z-50"
-          >
-            <div className="p-6">
-              <ul className="space-y-4">
-                {[
-                  { title: 'Home', path: '/' },
-                  { title: 'About', path: '/about' },
-                  { title: 'Contact', path: '/contact' },
-                  { title: 'Results', path: '/results' },
-                  { title: 'Admission Info', path: '/admission-info' },
-                ].map((item, index) => (
-                  <li key={index}>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) =>
-                        `block px-4 py-2 text-lg ${
-                          isActive ? 'text-[#CB152E]' : 'text-black'
-                        }`
-                      }
-                    >
-                      {item.title}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Profile Dropdown in Sidebar Bottom */}
-              <div className="absolute bottom-6 left-6 w-full">
-                <button
-                  onClick={toggleDropdown}
-                  className="flex items-center space-x-2 px-4 py-2 text-lg"
-                >
-                  <FaUserCircle size={20} className="text-black" />
-                  <span>Profile</span>
-                </button>
-                {dropdownOpen && (
-                  <ul className="mt-2 space-y-1 bg-white border rounded shadow-md">
-                    <li>
-                      <button className="block w-full px-4 py-2 text-left text-black hover:bg-gray-100">
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )}
+        </div>
       </div>
-    </div>
+    </nav>
   );
 };
+const links = <>
+  <li className="md:ml-10 pt-10 md:pt-0">
+    <NavLink
+      to="/"
+      className={({ isActive }) =>
+        `text-lg cursor-pointer ${isActive ? 'text-primary' : 'text-gray-600'} hover:text-[#01204E]`
+      }
+    >
+      Home
+    </NavLink>
+  </li>
+  <li className="md:ml-10 pt-10 md:pt-0">
+    <NavLink
+      to="/results"
+      className={({ isActive }) =>
+        `text-lg cursor-pointer ${isActive ? 'text-primary' : 'text-gray-600'} hover:text-[#01204E]`
+      }
+    >
+      Results
+    </NavLink>
+  </li>
+  <li className="md:ml-10 pt-10 md:pt-0">
+    <NavLink
+      to="/admission"
+      className={({ isActive }) =>
+        `text-lg cursor-pointer ${isActive ? 'text-primary' : 'text-gray-600'} hover:text-[#01204E]`
+      }
+    >
+      Admission
+    </NavLink>
+  </li>
+  <li className="md:ml-10 pt-10 md:pt-0">
+    <NavLink
+      to="/about"
+      className={({ isActive }) =>
+        `text-lg cursor-pointer ${isActive ? 'text-primary' : 'text-gray-600'} hover:text-[#01204E]`
+      }
+    >
+      About
+    </NavLink>
+  </li>
+  <li className="md:ml-10 pt-10 md:pt-0">
+    <NavLink
+      to="/contact"
+      className={({ isActive }) =>
+        `text-lg cursor-pointer ${isActive ? 'text-primary' : 'text-gray-600'} hover:text-[#01204E]`
+      }
+    >
+      Contact Us
+    </NavLink>
+  </li>
+  <li className="md:ml-10 pt-10 md:pt-0">
+
+    <Link to="/login" className="group relative inline-flex items-center justify-center overflow-hidden rounded-md p-0.5 md:font-bold text-sm md:text-base">
+      <span className="absolute h-full w-full bg-gradient-to-br from-[#CB152E] via-[#FF5478] to-[#FF00C6] group-hover:from-[#FF00C6] group-hover:via-[#FF5478] group-hover:to-[#CB152E]"></span>
+      <span className="duration-400 relative rounded-md bg-white px-6 py-2 transition-all ease-out group-hover:bg-opacity-0">
+        <span className="relative bg-gradient-to-br from-[#CB152E] via-[#FF5478] to-[#FF00C6] bg-clip-text text-transparent group-hover:text-white">
+          Login
+        </span>
+      </span>
+    </Link>
+
+  </li>
+
+</>
+
 
 export default Navbar;
